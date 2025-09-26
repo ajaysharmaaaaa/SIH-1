@@ -38,10 +38,10 @@ const Home: React.FC = () => {
   ];
 
   const stats = [
-    { number: '50,000+', label: 'Students Guided' },
+    { number: '5,000+', label: 'Courses' },
     { number: '1,000+', label: 'Government Colleges' },
     { number: '200+', label: 'Career Paths' },
-    { number: '95%', label: 'Success Rate' }
+    { number: '95%', label: 'Satisfaction' }
   ];
 
   return (
