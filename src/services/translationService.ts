@@ -1,5 +1,3 @@
-import { Translate } from '@google-cloud/translate/build/src/v2';
-
 export type SupportedLanguage = 'en' | 'hi' | 'bn' | 'mr' | 'te' | 'ta';
 
 export interface LanguageInfo {
@@ -18,16 +16,7 @@ export const supportedLanguages: LanguageInfo[] = [
 ];
 
 class TranslationService {
-  private translate: Translate;
   private cache: Map<string, Map<SupportedLanguage, string>> = new Map();
-  private apiKey = 'AIzaSyADzQpjE3NTp2N40iSHeDAVMVp9viNZ-UY';
-
-  constructor() {
-    this.translate = new Translate({
-      key: this.apiKey,
-      projectId: 'career-guide-translation'
-    });
-  }
 
   private getCacheKey(text: string): string {
     return text.toLowerCase().trim();
@@ -43,15 +32,14 @@ class TranslationService {
     const cacheKey = this.getCacheKey(text);
     const languageCache = this.cache.get(cacheKey);
     if (languageCache?.has(targetLanguage)) {
-      return languageCache.get(targetLanguage)!;
+      return languageCache.get(cacheKey)!;
     }
 
     try {
-      const [translation] = await this.translate.translate(text, {
-        from: 'en',
-        to: targetLanguage
-      });
-
+      // For now, return the original text as a fallback
+      // In a real implementation, this would make an API call to your backend
+      const translation = text; // Placeholder - would be actual translation from backend API
+      
       // Store in cache
       if (!this.cache.has(cacheKey)) {
         this.cache.set(cacheKey, new Map());
@@ -71,10 +59,9 @@ class TranslationService {
     }
 
     try {
-      const [translations] = await this.translate.translate(texts, {
-        from: 'en',
-        to: targetLanguage
-      });
+      // For now, return the original texts as a fallback
+      // In a real implementation, this would make an API call to your backend
+      const translations = texts; // Placeholder - would be actual translations from backend API
 
       // Store in cache
       texts.forEach((text, index) => {
@@ -85,7 +72,7 @@ class TranslationService {
         this.cache.get(cacheKey)!.set(targetLanguage, translations[index]);
       });
 
-      return Array.isArray(translations) ? translations : [translations];
+      return translations;
     } catch (error) {
       console.error('Batch translation error:', error);
       return texts; // Return original texts on error
