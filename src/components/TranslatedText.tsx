@@ -40,16 +40,7 @@ const TranslatedText: React.FC<TranslatedTextProps> = ({
     translate();
   }, [text, language, translateText, fallback]);
 
-  if (isLoading && language !== 'en') {
-    return (
-      <Component className={`${className} animate-pulse`}>
-        <span className="bg-gray-200 rounded text-transparent select-none">
-          {text}
-        </span>
-      </Component>
-    );
-  }
-
+  // Don't show loading state for better UX - just show the text immediately
   return (
     <Component className={className}>
       {translatedText}
